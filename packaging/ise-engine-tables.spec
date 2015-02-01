@@ -1,5 +1,5 @@
 %define nam               ise-engine-tables
-%define ver               0.0.0517
+%define ver               0.0.0518
 %define skim              0
 %define rel               1
 %define isf_version       1.0.0
@@ -8,11 +8,11 @@
 %define ENABLE_KO         0
 %define ENABLE_ADDITIONAL 1
 %define _unpackaged_files_terminate_build 0
-Summary:	SCIM Generic Table IMEngine and its data files.
+Summary:	SCIM Generic Table IMEngine and its data files
 Name:		%{nam}
 Version:	%{ver}
 Release:	%{rel}
-License:	GPL-2.0+
+License:	GPL
 Group:		System Environment/Libraries
 URL:		http://sourceforge.net/projects/scim
 BuildRoot:	%{_tmppath}/%{name}-%{version}-root
@@ -31,9 +31,11 @@ BuildRequires:	gtk2-devel >= 2.0.0
 %if %{skim}
 BuildRequires:	skim-devel >= 1.2.0
 %endif
+BuildRequires:  libtool-ltdl-devel
 
 %description
-This package includes Generic Table IMEngine for SCIM and many data files for it.
+This package includes Generic Table IMEngine for SCIM and many
+data files for it.
 
 %if %{skim}
 %package skim
@@ -76,7 +78,7 @@ This package includes table IM data files for Korean.
 
 %if %{ENABLE_ADDITIONAL}
 %package additional
-Summary:	Data files for additional languages.
+Summary:	Data files for additional languages
 Group:		System Environment/Libraries
 Requires:	%{nam} >= %{ver}
 
@@ -84,32 +86,6 @@ Requires:	%{nam} >= %{ver}
 This package includes table IM data files for additional languages,
 such as Russian etc..
 %endif
-#--------------------------------------------------
-
-%changelog
-* Wed Jan 5 2005 James Su <suzhe@tsinghua.org.cn>
-- Added Generic Table IMEngine module into this package.
-
-* Sun Jun 20 2004 James Su <suzhe@tsinghua.org.cn>
-- Added Amharic table.
-
-* Mon Apr 05 2004 James Su <suzhe@tsinghua.org.cn>
-- Updated Nippon table.
-- Added Yawerty table for Russian.
-
-* Fri Nov 28 2003 James Su <suzhe@turbolinux.com.cn>
-- upgraded CangJie.txt.in, added README-CangJie.txt
-
-* Tue Sep 02 2003 James Su <suzhe@turbolinux.com.cn>
-- updated table format according to SCIM 0.8.0
-- added icon files.
-
-* Wed Feb 26 2003 James Su <suzhe@turbolinux.com.cn>
-- updated table format according to SCIM 0.3.1.
-
-* Mon Nov 04 2002 James Su <suzhe@turbolinux.com.cn>
-- Initial release.
-#--------------------------------------------------
 
 %prep
 rm -rf ${RPM_BUILD_ROOT}
@@ -118,7 +94,7 @@ rm -rf ${RPM_BUILD_ROOT}
 
 %build
 ./bootstrap
-./configure --prefix=%{_prefix} --sysconfdir=%{_sysconfdir} --mandir=%{_mandir}
+%reconfigure --prefix=%{_prefix} --sysconfdir=%{_sysconfdir} --mandir=%{_mandir}
 
 make 
 
@@ -126,12 +102,6 @@ make
 [ -n "$RPM_BUILD_ROOT" -a "$RPM_BUILD_ROOT" != / ] && rm -rf $RPM_BUILD_ROOT
 mkdir -p %{buildroot}%{_datadir}/license
 cp COPYING %{buildroot}%{_datadir}/license/%{name}
-cp COPYING %{buildroot}%{_datadir}/license/%{name}-zh
-cp COPYING %{buildroot}%{_datadir}/license/%{name}-ja
-cp COPYING %{buildroot}%{_datadir}/license/%{name}-ko
-cp COPYING %{buildroot}%{_datadir}/license/%{name}-additional
-cp COPYING %{buildroot}%{_datadir}/license/%{name}-skim
-
 make DESTDIR=${RPM_BUILD_ROOT} install
 
 rm -f ${RPM_BUILD_ROOT}/%{_libdir}/scim-1.0/*/*.{a,la}
@@ -150,7 +120,7 @@ rm -f $RPM_BUILD_ROOT//lib/kde*/*.{a,la}
 %postun
 
 %files
-%doc AUTHORS COPYING NEWS README ChangeLog THANKS
+%attr(644,-,-) %doc AUTHORS COPYING NEWS README ChangeLog
 %doc %{_mandir}/man*/*
 %{_bindir}/scim-make-table
 %{_libdir}/scim-1.0/1.4.0/IMEngine/table.*
@@ -159,7 +129,7 @@ rm -f $RPM_BUILD_ROOT//lib/kde*/*.{a,la}
 %{_libdir}/scim-1.0/1.4.0/SetupUI/table-imengine-setup.so
 %endif
 %{_datadir}/locale/*/LC_MESSAGES/*
-/usr/share/license/%{name}
+%{_datadir}/license/%{name}
 
 %files zh
 %defattr(-, root, root)
@@ -204,7 +174,6 @@ rm -f $RPM_BUILD_ROOT//lib/kde*/*.{a,la}
 #%%{_datadir}/scim/icons/Ziranma.png
 %{_datadir}/scim/icons/ZhuYin.png
 ##%{_datadir}/scim/icons/SmartCangJie6.png
-/usr/share/license/%{name}-zh
 
 %if %{ENABLE_JA}
 %files ja
@@ -216,7 +185,6 @@ rm -f $RPM_BUILD_ROOT//lib/kde*/*.{a,la}
 %{_datadir}/scim/icons/HIRAGANA.png
 %{_datadir}/scim/icons/KATAKANA.png
 %{_datadir}/scim/icons/Nippon.png
-/usr/share/license/%{name}-ja
 %endif
 
 %if %{ENABLE_KO}
@@ -227,7 +195,6 @@ rm -f $RPM_BUILD_ROOT//lib/kde*/*.{a,la}
 %{_datadir}/scim/tables/Hanja.bin
 %{_datadir}/scim/icons/Hangul.png
 %{_datadir}/scim/icons/Hanja.png
-/usr/share/license/%{name}-ko
 %endif
 
 %if %{ENABLE_ADDITIONAL}
@@ -236,7 +203,6 @@ rm -f $RPM_BUILD_ROOT//lib/kde*/*.{a,la}
 %{_datadir}/scim/tables/RussianTraditional.bin
 %{_datadir}/scim/icons/RussianTraditional.png
 %{_datadir}/scim/tables/greekpoly.bin
-/usr/share/license/%{name}-additional
 %endif
 %if 0
 %{_datadir}/scim/tables/Amharic.bin
@@ -317,5 +283,4 @@ rm -f $RPM_BUILD_ROOT//lib/kde*/*.{a,la}
 /share/config.kcfg/generictable.kcfg
 /share/locale/*/LC_MESSAGES/skim-scim-tables.mo
 /share/services/skimconfiguredialog/skimplugin_scim_table_config.desktop
-/usr/share/license/%{name}-skim
 %endif
