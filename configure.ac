@@ -1,6 +1,6 @@
 # Process this file with autoconf to produce a configure script.
 #AC_INIT(scim-tables, 0.5.10, suzhe@tsinghua.org.cn) #do not forget to edit skim/configure.in.in to change the version
-AC_INIT(ise-engine-tables-zh, 0.0.0518, li2012.zhang@samsung.com)
+AC_INIT(ise-engine-tables-zh, 1.0.0, li2012.zhang@samsung.com)
 AC_CONFIG_SRCDIR([src/scim_table_imengine.h])
 
 ISF_VERSION=1.0.0
@@ -79,11 +79,16 @@ if test "$enable_debug" = "yes"; then
 fi
 
 SCIM_ICONDIR=`$PKG_CONFIG --variable=icondir scim`
+SCIM_PKGDIR=`$PKG_CONFIG --variable=pkgdir scim`
 SCIM_MODULEDIR=`$PKG_CONFIG --variable=moduledir scim`
 SCIM_DATADIR=`$PKG_CONFIG --variable=scimdatadir scim`
 
 if test "x$SCIM_ICONDIR" = "x"; then
   SCIM_ICONDIR=${datadir}/scim/icons
+fi
+
+if test "x$SCIM_PKGDIR" = "x"; then
+  SCIM_PKGDIR=${datadir}/packages
 fi
 
 if test "x$SCIM_MODULEDIR" = "x"; then
@@ -95,6 +100,7 @@ if test "x$SCIM_DATADIR" = "x"; then
 fi
 
 AC_SUBST(SCIM_ICONDIR)
+AC_SUBST(SCIM_PKGDIR)
 AC_SUBST(SCIM_MODULEDIR)
 AC_SUBST(SCIM_DATADIR)
 
